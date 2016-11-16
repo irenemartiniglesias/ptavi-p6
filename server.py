@@ -17,12 +17,24 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 
     def handle(self):
         # Escribe dirección y puerto del cliente (de tupla client_address)
-        self.wfile.write(b"Hemos recibido tu peticion")
         while 1:
             # Leyendo línea a línea lo que nos envía el cliente
             line = self.rfile.read()
-            print("El cliente nos manda " + line.decode('utf-8'))
-
+            linea_decod = line.decode('utf-8')
+            METODO = linea_decod.split(' ')[0]
+            METODOS = ['INVITE', 'BYE', 'ACK']
+            if len(linea_decod) >= 2:
+                if METODO == 'INVITE':
+                    mensaje = b'SIP/2.0 100 Trying \r\n\r\n'
+                    mensaje += b'SIP/2.0 180 Ring \r\n\r\n'
+                    mensaje += b'SIP/2.0 200 OK \r\n\r\n'
+                    self.wfile.write(mensaje)
+                elif METODO == 'BYE':
+                    mensaje = b'SIP/2.0 200 OK \r\n\r\n'
+                    self.wfile.write(mensaje)
+            else:
+                print("El cliente nos manda " + linea_decod)
+                
             # Si no hay más líneas salimos del bucle infinito
             if not line:
                 break
@@ -30,5 +42,5 @@ class EchoHandler(socketserver.DatagramRequestHandler):
 if __name__ == "__main__":
     # Creamos servidor de eco y escuchamos
     serv = socketserver.UDPServer((SERVER, PORT), EchoHandler)
-    print("Lanzando servidor UDP de eco...")
+    print("Listening...")
     serv.serve_forever()
