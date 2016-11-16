@@ -6,9 +6,11 @@ Clase (y programa principal) para un servidor de eco en UDP simple
 
 import socketserver
 import sys
+import os
 
 PORT = int(sys.argv[2])
 SERVER = sys.argv[1]
+FICHERO = sys.argv[3]
 
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
@@ -29,6 +31,9 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     mensaje += b'SIP/2.0 180 Ring \r\n\r\n'
                     mensaje += b'SIP/2.0 200 OK \r\n\r\n'
                     self.wfile.write(mensaje)
+                elif METODO == 'ACK':
+                    aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + FICHERO
+                    os.system(aEjecutar)
                 elif METODO == 'BYE':
                     mensaje = b'SIP/2.0 200 OK \r\n\r\n'
                     self.wfile.write(mensaje)
