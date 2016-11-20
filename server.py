@@ -8,10 +8,16 @@ import socketserver
 import sys
 import os
 
-PORT = int(sys.argv[2])
-SERVER = sys.argv[1]
-FICHERO = sys.argv[3]
 
+try:
+
+    PORT = int(sys.argv[2])
+    SERVER = sys.argv[1]
+    FICHERO = sys.argv[3]
+except:
+    sys.exit('Usage: python client.py method receiver@IP:SIPport')
+    
+    
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
@@ -32,11 +38,16 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     mensaje += b'SIP/2.0 200 OK \r\n\r\n'
                     self.wfile.write(mensaje)
                 elif METODO == 'ACK':
-                    aEjecutar = 'mp32rtp -i 127.0.0.1 -p 23032 < ' + FICHERO
+                    aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <' + FICHERO
                     os.system(aEjecutar)
                 elif METODO == 'BYE':
                     mensaje = b'SIP/2.0 200 OK \r\n\r\n'
                     self.wfile.write(mensaje)
+                elif METODO not in METODOS:
+                    mensaje = b'SIP/2.0 405 Method Not Allowed \r\n\r\n'
+                    self.wfile.write(mensaje)
+                else:
+                    self.wfile.write('b"SIP/2.0 400 Bad Request\r\n\r\n')
             else:
                 print("El cliente nos manda " + linea_decod)
                 
@@ -45,6 +56,12 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                 break
 
 if __name__ == "__main__":
+    
+    if PORT < 1024:
+        sys.exit('PORT INCORRET, please enter a port bigger than 1024') 
+    if len(sys.argv) != 4:
+        sys.exit('Usage: python client.py method receiver@IP:SIPport') 
+    
     # Creamos servidor de eco y escuchamos
     serv = socketserver.UDPServer((SERVER, PORT), EchoHandler)
     print("Listening...")
