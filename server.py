@@ -14,8 +14,8 @@ try:
     FICHERO = sys.argv[3]
 except:
     sys.exit('Usage: python client.py method receiver@IP:SIPport')
-    
-    
+
+
 class EchoHandler(socketserver.DatagramRequestHandler):
     """
     Echo server class
@@ -37,7 +37,8 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     self.wfile.write(mensaje)
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'ACK':
-                    aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <' + FICHERO
+                    aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <'\
++ FICHERO
                     os.system(aEjecutar)
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'BYE':
@@ -53,17 +54,18 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     print("El cliente nos manda " + linea_decod)
             else:
                 print("El cliente nos manda " + linea_decod)
-    
+
             """Si no hay más líneas salimos del bucle infinito"""
             if not line:
                 break
 
+
 if __name__ == "__main__":
 
     if PORT < 1024:
-        sys.exit('PORT INCORRET, please enter a port bigger than 1024') 
+        sys.exit('PORT INCORRET, please enter a port bigger than 1024')
     if len(sys.argv) != 4:
-        sys.exit('Usage: python client.py method receiver@IP:SIPport') 
+        sys.exit('Usage: python client.py method receiver@IP:SIPport')
 
     """Creamos servidor de eco y escuchamos"""
     serv = socketserver.UDPServer((SERVER, PORT), EchoHandler)
