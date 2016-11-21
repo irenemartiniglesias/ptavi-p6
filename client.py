@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
-"""Programa cliente que abre un socket a un servidor"""
+"""Programa cliente que abre un socket a un servidor."""
 
 import socket
 import sys
 
 """Cliente UDP simple."""
 
-"""Dirección IP del servidor y puerto"""
+"""Dirección IP del servidor y puerto."""
 
 try:
     METODO = sys.argv[1]
@@ -25,7 +25,7 @@ if len(sys.argv) != 3:
 if PORT < 1024:
     sys.exit('PORT INCORRET')
 
-"""Contenido que vamos a enviar"""
+"""Contenido que vamos a enviar."""
 Linea_sip = ' sip:' + USUARIO + SERVER + ' SIP/2.0\r\n'
 LINEA = METODO + Linea_sip
 
@@ -50,6 +50,6 @@ if lista == ['SIP/2.0 100 Trying', 'SIP/2.0 180 Ring', 'SIP/2.0 200 OK']:
     data = my_socket.recv(1024)
 
 
-"""Cerramos todo"""
+"""Cerramos todo."""
 my_socket.close()
 print("Fin.")
