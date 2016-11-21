@@ -11,7 +11,7 @@ try:
 
     PORT = int(sys.argv[2])
     SERVER = sys.argv[1]
-    FICHERO = sys.argv[3]
+    FICH = sys.argv[3]
 except:
     sys.exit('Usage: python client.py method receiver@IP:SIPport')
 
@@ -37,8 +37,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     self.wfile.write(mensaje)
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'ACK':
-                    aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <' \
-+ FICHERO
+                    aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <' + FICH
                     os.system(aEjecutar)
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'BYE':
@@ -53,7 +52,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     self.wfile.write('b"SIP/2.0 400 Bad Request\r\n\r\n')
                     print("El cliente nos manda " + linea_decod)
             else:
-                print("El cliente nos manda " + linea_decod)
+                print(" ")
 
             """Si no hay más líneas salimos del bucle infinito"""
             if not line:
