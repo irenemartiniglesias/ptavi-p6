@@ -38,7 +38,7 @@ class EchoHandler(socketserver.DatagramRequestHandler):
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'ACK':
                     aEjecutar = './mp32rtp -i ' + SERVER + ' -p 23032 <' \
-                     + FICHERO
++ FICHERO
                     os.system(aEjecutar)
                     print("El cliente nos manda " + linea_decod)
                 elif METODO == 'BYE':
